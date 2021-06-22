@@ -14,7 +14,7 @@ public class UserTest {
     @Before
     public void init(){
         this.user = new User( "test@yopmail.fr", "TEST", "Bla", "24", "blablabla");
-        this.user2 = new User( "user.testgmail.com", "TEST", "Bla", "20", "blablabla");
+        this.user2 = new User( "user.testgmail.com", "test", "bla", "12", "bla");
 
     }
 
@@ -27,21 +27,41 @@ public class UserTest {
 
     @Test
     public void isValidFirstname(){
-        Assert.assertEquals(true, this.user.isFirstnameValid(this.user.getFirstname()));
+        Assert.assertTrue(this.user.isFirstnameValid(this.user.getFirstname()));
     }
 
     @Test
     public void isValidLastname(){
-        Assert.assertEquals(true, this.user.isLastnameValid(this.user.getLastname()));
+        Assert.assertTrue(this.user.isLastnameValid(this.user.getLastname()));
     }
 
     @Test
     public void isValidMail(){
-        Assert.assertEquals(true, this.user.isEmailValid(this.user.getMail()));
+        Assert.assertTrue(this.user.isEmailValid(this.user.getMail()));
     }
 
     @Test
     public void isValidPassword() {
-        Assert.assertEquals(true, this.user.isPasswordValid(this.user.getPassword()));
+        Assert.assertTrue(this.user.isPasswordValid(this.user.getPassword()));
+    }
+
+    @Test
+    public void isNoValidFirstname(){
+        Assert.assertFalse(this.user2.isFirstnameValid(this.user2.getFirstname()));
+    }
+
+    @Test
+    public void isNoValidLastname(){
+        Assert.assertFalse(this.user2.isLastnameValid(this.user2.getLastname()));
+    }
+
+    @Test
+    public void isNoValidMail(){
+        Assert.assertFalse(this.user2.isEmailValid(this.user2.getMail()));
+    }
+
+    @Test
+    public void isNoValidPassword() {
+        Assert.assertFalse(this.user2.isPasswordValid(this.user2.getPassword()));
     }
 }

@@ -10,11 +10,15 @@ import java.util.ArrayList;
 public class TaskTest {
 
     private Task task;
+    private Task task2;
+    private Task task3;
     private final ArrayList<Task> listTask = new ArrayList<Task>();
 
     @Before
     public void init(){
-        this.task = new Task( "Test", "contenu testé et validé", LocalDateTime.of(2021, 4, 29, 19, 45, 0));
+        this.task = new Task( "Test", "contenu testé et validé", LocalDateTime.now());
+        this.task2 = new Task( "Test", "", LocalDateTime.now());
+        this.task3 = new Task("Test", "", LocalDateTime.now());
     }
 
     @Test
@@ -23,35 +27,33 @@ public class TaskTest {
 
     @Test
     public void isTimeTrue() {
-        LocalDateTime lastDate = LocalDateTime.of(2021, 4, 29, 19, 10, 0);
-        Assert.assertTrue(this.task.isThirtyMinutesOver(lastDate));    }
-
-    @Test
-    public void isTimeFalse() {
-        LocalDateTime lastDate = LocalDateTime.of(2021, 4, 29, 19, 34, 0);
-        Assert.assertFalse(this.task.isThirtyMinutesOver(lastDate));
+        LocalDateTime createDate = this.task.getCreateDate().minusMinutes(30);
+        Assert.assertTrue(this.task.isThirtyMinutesOver(createDate));
     }
 
     @Test
-    public void isTimeHourFalse() {
-        LocalDateTime lastDate = LocalDateTime.of(2021, 4, 29, 20, 05, 0);
-        Assert.assertFalse(this.task.isThirtyMinutesOver(lastDate));
+    public void isTimeFalse() {
+        LocalDateTime createDate = this.task2.getCreateDate().minusMinutes(10);
+        Assert.assertFalse(this.task2.isThirtyMinutesOver(createDate));
     }
 
     @Test
     public void isTimeHourTrue() {
-        LocalDateTime lastDate = LocalDateTime.of(2021, 4, 29, 20, 45, 0);
-        Assert.assertTrue(this.task.isThirtyMinutesOver(lastDate));
+        LocalDateTime dateTime = this.task3.getCreateDate().minusHours(1);
+        Assert.assertTrue(this.task.isThirtyMinutesOver(dateTime));
     }
+
     @Test
     public void insertItemsFalse() {
-        this.task = new Task( "Test", "contenu testé et validé", LocalDateTime.now());
-        Assert.assertFalse(this.task.isTaskValid());
+        LocalDateTime createDate = this.task.getCreateDate().minusMinutes(10);
+        Assert.assertFalse(this.task.isThirtyMinutesOver(createDate) && this.task.isTaskValid(this.listTask));
     }
+
     @Test
     public void getTenItems() {
+        LocalDateTime createDate = this.task.getCreateDate().minusMinutes(30);
         for(int i = 0; i < 10; i++) {
-            if(this.task.isTaskValid()) {
+            if(this.task.isThirtyMinutesOver(createDate) && this.task.isTaskValid(this.listTask)) {
                 Assert.assertTrue(this.listTask.add(task));
             }
         }
@@ -60,15 +62,16 @@ public class TaskTest {
     }
     @Test
     public void moreTenItems() {
+        LocalDateTime createDate = this.task.getCreateDate().minusMinutes(30);
         for(int i = 0; i < 15; i++) {
-            /* if(item.isTaskValid()) {
-                Assert.assertTrue(this.listItem.add(item));
-            } */
-            Assert.assertTrue(this.listTask.add(task));
+            if(this.task.isThirtyMinutesOver(createDate) && this.task.isTaskValid(this.listTask)) {
+                this.listTask.add(task);
+            }
         }
 
-        Assert.assertTrue(this.listTask.size() > 10);
+        Assert.assertFalse(this.task.isThirtyMinutesOver(createDate) && this.task.isTaskValid(this.listTask));
     }
+
     @Test
     public void testSendMail() {
         if(this.listTask.size() > 8) {

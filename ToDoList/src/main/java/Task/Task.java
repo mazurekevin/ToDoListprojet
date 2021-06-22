@@ -1,6 +1,7 @@
 package Task;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 public class Task {
     private int id;
@@ -46,16 +47,12 @@ public class Task {
             int i = 0;
             i = this.createDate.getMinute()-createDate.getMinute();
             i = 60 - i;
-            if(i<30){
-                return false;
-            }else{
-                return true;
-            }
+            return i >= 30;
         }
         return false;
     }
-    public boolean isTaskValid() {
-        if(isThirtyMinutesOver(this.getCreateDate()) && isContentValid(this.getContent())) {
+    public boolean isTaskValid(ArrayList<Task> listTask) {
+        if(isContentValid(this.getContent()) && listTask.size() < 10) {
             return true;
         }
         return false;
